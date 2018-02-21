@@ -1,0 +1,48 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.higgsup.test1.model.Employee" table="employee">
+
+        <meta attribute="class-description">
+            mapping table employee
+        </meta>
+        <cache usage="read-only"/>
+
+        <id name="id" type="int" column="idemployee">
+            <generator class="native"/>
+        </id>
+
+        <property name="name" column="name" type="string"/>
+        <property name="phone" column="phone" type="string"/>
+        <many-to-one name="company" class="com.higgsup.test1.model.company">
+            <column name="company"/>
+        </many-to-one>
+    </class>
+
+    <class name="com.higgsup.test1.model.company" table="company">
+
+        <meta attribute="class-description">
+            mapping table company
+        </meta>
+        <cache usage="read-write" />
+        <id name="id" type="int" column="idcompany">
+            <generator class="native"/>
+        </id>
+
+        <property name="name" column="name" type="string"/>
+        <property name="address" column="address" type="string"/>
+        <set name="employee" table="employee">
+            <key>
+                <column name="idemployee"/>
+            </key>
+            <one-to-many class="com.higgsup.test1.model.Employee"/>
+        </set>
+    </class>
+
+
+    <query name="getAll">from company</query>
+</hibernate-mapping>

@@ -1,0 +1,56 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="hibernate.dialect">
+            org.hibernate.dialect.MySQLDialect
+        </property>
+        <property name="hibernate.connection.driver_class">
+            com.mysql.jdbc.Driver
+        </property>
+
+        <!-- Assume test is the database name -->
+
+        <property name="hibernate.connection.url">
+            jdbc:mysql://localhost:3306/test?useSSL=false
+        </property>
+
+        <property name="hibernate.connection.username">
+            root
+        </property>
+
+        <property name="hibernate.connection.password">
+            123456
+        </property>
+
+        <!--
+                config auto commit nếu để true,, mặc định là false
+        -->
+
+        <!--        <property name="connection.autocommit">true</property>
+                <property name="connection.proof_property">true</property>-->
+
+
+        <property name="hibernate.id.new_generator_mappings">false</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="use_sql_comments">true</property>
+
+        <!-- thread lấy tới session hiện tại của thread-->
+        <!-- confix để dùng getCurrentSession-->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
+        </property>
+
+        <property name="hibernate.cache.use_query_cache">true</property>
+
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+
+        <property name="net.sf.ehcache.configurationResourceName">/hierarchy/cache.xml</property>
+
+
+        <mapping class="com.higgsup.hierarchy.model.Company"/>
+    </session-factory>
+</hibernate-configuration>
