@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -25,7 +26,7 @@ public class Main {
         sessionFactory = configuration.buildSessionFactory();
         session = sessionFactory.openSession();
 
-        getAll(session);
+        save(session);
 
     }
 
@@ -42,9 +43,11 @@ public class Main {
         Session session1 = sessionFactory.openSession();
         Company company1 = session1.load(Company.class, new Integer(2));
         System.out.println(company1.getAddress());
-
+        System.out.println("===========");
         Session session12 = sessionFactory.getCurrentSession();
-        System.out.println(session12.getCacheMode());
+        Transaction tx = session12.beginTransaction();
+        Company company12 = session12.load(Company.class, new Integer(2));
+        System.out.println(company12.getAddress());
     }
 
     public static void save(Session session) {
@@ -53,12 +56,25 @@ public class Main {
         Validator validator = factory.getValidator();
 
         Company companyName = new Company();
-        companyName.setName("thanh111");
-        //session.save(companyName);
+
 
         Set<ConstraintViolation<Company>> constraintViolations =
                 validator.validate(companyName);
-        constraintViolations.size();
+        Integer numberError = constraintViolations.size();
+        if (numberError == 0) {
+            System.out.println("có thể thêm ");
+            Transaction tx = session.beginTransaction();
+            session.save(companyName);
+            tx.commit();
+        } else {
+            System.out.println("không thể thêm có " + numberError + " lỗi");
+
+
+            for (Iterator<ConstraintViolation<Company>> it = constraintViolations.iterator(); it.hasNext(); ) {
+                ConstraintViolation<Company> violation = it.next();
+                System.out.println(violation.getPropertyPath() + violation.getMessage());
+            }
+        }
 
     }
 }

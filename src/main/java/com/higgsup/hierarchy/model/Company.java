@@ -20,6 +20,7 @@ public class Company {
 
     private int id;
     private String address;
+
     @NotNull
     @Column(name = "address")
     public String getAddress() {
@@ -39,6 +40,7 @@ public class Company {
 
     private String name;
 
+    @NotNull
     @Column(name = "name")
     public String getName() {
         return name;
