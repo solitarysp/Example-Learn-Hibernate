@@ -8,14 +8,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-
 
 public class Main {
     private static SessionFactory sessionFactory = null;
@@ -26,7 +27,7 @@ public class Main {
         sessionFactory = configuration.buildSessionFactory();
         session = sessionFactory.openSession();
 
-        save(session);
+        getALlSessionQuery(session);
 
     }
 
@@ -76,5 +77,24 @@ public class Main {
             }
         }
 
+    }
+
+
+    public static void getALlSessionQuery(Session session) {
+        Query query = session.createQuery("select c from Company as c ").setCacheable(true);
+        List<Company> companys = query.getResultList();
+        for (Company company : companys
+                ) {
+            System.out.println(company.getAddress());
+        }
+        System.out.println("-=================");
+        Session session1=sessionFactory.getCurrentSession();
+        Transaction tx=session1.beginTransaction();
+        Query query1 = session1.createQuery("select c from Company as c ").setCacheable(true);
+        List<Company> companys1 = query1.getResultList();
+        for (Company company : companys1
+                ) {
+            System.out.println(company.getAddress());
+        }
     }
 }
